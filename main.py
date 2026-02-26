@@ -4,12 +4,18 @@ from PyQt6.QtGui import QPainter, QColor, QPixmap
 from src.snake import Snake
 from PyQt6.QtCore import QTimer,Qt,QRect
 from src.config import step,X_max,Y_max,Defalut_Direction,food_nums,eat_range,block_size
-from src.config import head_path,body_path,food_path
+from src.config import head_path,body_path,food_path,bk2_path
 from src.food import Food
+from src.playmenu import Playmenu
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("game")
+        self.setStyleSheet(f"""
+            QMainWindow {{
+                border-image: url({bk2_path}) 0 0 0 0 stretch stretch;
+            }}
+        """)
         self.setGeometry(100, 100, X_max, Y_max)  # 设置窗口位置和大小
         #设置初始蛇
         self.snake =Snake(X_max//2,Y_max//2)
@@ -45,6 +51,10 @@ class MainWindow(QMainWindow):
         self.timer.setInterval(150)
         self.timer.timeout.connect(self.paint_and_check)
         self.timer.start()
+
+        
+        
+        
 
     def paint_and_check(self):
         #移动 画蛇和检查死亡
@@ -88,11 +98,18 @@ class MainWindow(QMainWindow):
             painter.drawPixmap(i.x-half,i.y-half,block_size,block_size,self.pix_food)
             # painter.fillRect(i.x-half,i.y-half,block_size,block_size,QColor("red"))    
 
+def playgame():
+    window = MainWindow()
+    window.show()   
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = MainWindow()
-    window.show()
+    
+    #window = MainWindow()
+    #window.show()
+    p=Playmenu()
+    p.play_singal.connect(playgame)
+    p.show()
     sys.exit(app.exec())
 
 
