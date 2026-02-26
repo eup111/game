@@ -1,6 +1,10 @@
-step = 10
-X_max = 800
-Y_max = 600
-Defalut_Direction = 0
-food_nums = 50
-eat_range=10
+step = 15#一次走的距离
+X_max = 800#画布x最大
+Y_max = 600#画布y最大
+Defalut_Direction = 0#默认朝向
+food_nums = 50#食物数量
+eat_range=20#能够吃到食物的距离
+block_size=20#代表蛇的方块大小
+head_path=r"D:\python\project\game\img\snakehead.png"
+body_path=r"D:\python\project\game\img\snakebody.png"
+food_path=r"D:\python\project\game\img\food.png"

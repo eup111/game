@@ -1,9 +1,10 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
-from PyQt6.QtGui import QPainter, QColor
+from PyQt6.QtGui import QPainter, QColor, QPixmap
 from src.snake import Snake
-from PyQt6.QtCore import QTimer,Qt
-from src.config import step,X_max,Y_max,Defalut_Direction,food_nums,eat_range
+from PyQt6.QtCore import QTimer,Qt,QRect
+from src.config import step,X_max,Y_max,Defalut_Direction,food_nums,eat_range,block_size
+from src.config import head_path,body_path,food_path
 from src.food import Food
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -20,6 +21,10 @@ class MainWindow(QMainWindow):
             food = Food(0,0)
             food.generate()#随机位置
             self.foods.append(food)
+        #图片    
+        self.pix_head = QPixmap(head_path)
+        self.pix_body = QPixmap(body_path) 
+        self.pix_food = QPixmap(food_path) 
 
         self.snake.dead_singal.connect(self.death)#死亡发出信号 调用death函数
 
@@ -73,13 +78,15 @@ class MainWindow(QMainWindow):
     def paintEvent(self, event):
         #update会自动调用 以x,y为中心画一个方块
         painter = QPainter(self)
-        block_size = 4
         half = block_size // 2
         for i,(x,y) in enumerate(self.snake.body):
-            painter.fillRect(x-half,y-half,block_size,block_size,QColor("green"))
+            pix = self.pix_head if i == 0 else self.pix_body
+            painter.drawPixmap(x-half,y-half,block_size,block_size,pix)
+            # painter.fillRect(x-half,y-half,block_size,block_size,QColor("green"))
         #画出食物
         for i in self.foods:
-            painter.fillRect(i.x-half,i.y-half,block_size,block_size,QColor("red"))    
+            painter.drawPixmap(i.x-half,i.y-half,block_size,block_size,self.pix_food)
+            # painter.fillRect(i.x-half,i.y-half,block_size,block_size,QColor("red"))    
 
 
 if __name__ == "__main__":
