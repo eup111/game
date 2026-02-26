@@ -1,4 +1,5 @@
 from PyQt6.QtCore import  pyqtSignal,QObject
+from src.config import X_max,Y_max
 class Snake(QObject):
     dead_singal = pyqtSignal()
     def __init__(self,x,y):
@@ -52,11 +53,14 @@ class Snake(QObject):
         del self.body[-1]
         self.body.insert(0,(self.x,self.y))
         del self.direction[-1]
-        self.direction.insert(0,direction)                
+        self.direction.insert(0,direction)    
+
     def is_dead(self):
-        if (self.x>0 and self.x<800) and (self.y>0 and self.y<800):
+        #检查是否碰到边界
+        if (self.x>0 and self.x<X_max) and (self.y>0 and self.y<Y_max):
             return 
         self.islive=0
+        #
       
 
 

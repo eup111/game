@@ -3,14 +3,14 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
 from PyQt6.QtGui import QPainter, QColor
 from src.snake import Snake
 from PyQt6.QtCore import QTimer,Qt
-step = 10
+from src.config import step,X_max,Y_max,Defalut_Direction
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("game")
-        self.setGeometry(100, 100, 800, 800)  # 设置窗口位置和大小
-        self.snake =Snake(400,400)
-        self.direction = None
+        self.setGeometry(100, 100, X_max, Y_max)  # 设置窗口位置和大小
+        self.snake =Snake(X_max//2,Y_max//2)
+        self.direction = Defalut_Direction
 
         self.snake.dead_singal.connect(self.death)
 
@@ -33,7 +33,8 @@ class MainWindow(QMainWindow):
         self.timer.start()
 
     def paint_and_check(self):
-        if self.direction is not None and self.snake.islive:
+        #画蛇和检查死亡
+        if self.snake.islive:
             self.snake.move(self.direction, step)
         self.snake.is_dead()
         if self.snake.islive == 0:
@@ -41,18 +42,22 @@ class MainWindow(QMainWindow):
         self.update()
 
     def set_direction(self,direction):
+        #设置方向
         self.direction = direction
 
     def click(self):
+        #按按钮后改变方向
         self.button_up.clicked.connect(lambda:self.set_direction(0))
         self.button_right.clicked.connect(lambda:self.set_direction(1))
         self.button_down.clicked.connect(lambda:self.set_direction(2))
         self.button_left.clicked.connect(lambda:self.set_direction(3))
 
     def death(self):
+        #死亡信息
         QMessageBox.critical(self, "消息", "你死了")
 
     def paintEvent(self, event):
+        #update会自动调用 以x,y为中心画一个方块
         painter = QPainter(self)
         block_size = 4
         half = block_size // 2
