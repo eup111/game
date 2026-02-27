@@ -31,3 +31,5 @@ if __name__ == "__main__":
     window = MainWindow()
     window.show()
     sys.exit(app.exec())
+
+# "img\snakebody.png;img\snakehead.png;img\title.png;img\background1.jpg;img\background2.jpg;" 

@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QMessageBox
-from PyQt6.QtGui import QPainter, QColor, QPixmap
+from PyQt6.QtGui import QPainter, QColor, QPixmap,QKeyEvent
 from src.snake import Snake
 from PyQt6.QtCore import QTimer,Qt,QRect
 from src.config import step,X_max,Y_max,Defalut_Direction,food_nums,eat_range,block_size
@@ -43,18 +43,19 @@ class MainWindow(QMainWindow):
         self.button_right.setGeometry(50, 0, 50, 50)
         self.button_down.setGeometry(100, 0, 50, 50)
         self.button_left.setGeometry(150, 0, 50, 50)
+        #隐藏按钮
+        self.button_up.hide()
+        self.button_right.hide()
+        self.button_down.hide()
+        self.button_left.hide()
 
         
-
         self.click()#点按钮改变方向 会朝方向自动移动
         self.timer = QTimer(self)
         self.timer.setInterval(150)
         self.timer.timeout.connect(self.paint_and_check)
         self.timer.start()
 
-        
-        
-        
 
     def paint_and_check(self):
         #移动 画蛇和检查死亡
@@ -81,6 +82,18 @@ class MainWindow(QMainWindow):
         self.button_down.clicked.connect(lambda:self.set_direction(2))
         self.button_left.clicked.connect(lambda:self.set_direction(3))
 
+    def keyPressEvent(self, event: QKeyEvent):
+        #按键改变方向
+        key = event.key()
+        if key == Qt.Key.Key_W:
+            self.set_direction(0)
+        elif key == Qt.Key.Key_D:
+            self.set_direction(1)
+        elif key == Qt.Key.Key_S:
+            self.set_direction(2)
+        elif key == Qt.Key.Key_A:
+            self.set_direction(3)   
+              
     def death(self):
         #死亡信息
         QMessageBox.critical(self, "消息", "你死了")
